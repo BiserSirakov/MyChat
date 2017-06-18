@@ -9,7 +9,7 @@ $(function () {
 function showModalUserLogin() {
     alertify.prompt("Enter your name to start:", "Biser Sirakov",
         function (e, name) {
-            $('#nickname').val(name);
+            $('#nickname').val(name.toUpperCase());
             $('.chat-title h1 span').html(name);
             startChatHub();
         })
@@ -63,7 +63,8 @@ function registerClientMethods(chatHub) {
 
     chatHub.client.onUserDisconnected = function (userName) {
         alertify.error(userName + ' left the chat');
-        $('.online-user').remove(":contains('" + userName + "')");
+        $('.online-user').remove(":contains('" + userName.toUpperCase() + "')");
+        $('.messages-content[data="' + userName.toUpperCase() + '"]').remove();
     }
 
     chatHub.client.messageReceived = function (userName, message) {
