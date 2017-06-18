@@ -147,6 +147,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\MyChatHub.cs" />
+    <Compile Include="Models\MessageDetails.cs" />
+    <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +308,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\New.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\DB\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

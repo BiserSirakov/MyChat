@@ -33,10 +33,12 @@ namespace MyChat.Controllers
             {
                 Directory.CreateDirectory(folderPath);
             }
-            
-            file.SaveAs(Path.Combine(folderPath, Path.GetFileName(file.FileName)));
 
-            return Json(new { fileName = file.FileName });
+            string fileName = Path.GetFileName(file.FileName);
+
+            file.SaveAs(Path.Combine(folderPath, fileName));
+
+            return Json(new { fileName = fileName });
         }
     }
 }

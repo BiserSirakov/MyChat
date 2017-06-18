@@ -1,145 +1,162 @@
-﻿var chat;
-var $onlineUsers = $('.online-users');
-var $messages = $('.messages-content');
+﻿var $onlineUsers = $('.online-users');
 var $messageBox = $('.message-box');
 var $closeBtn = $('.close-btn');
 
 $(function () {
-    showModalUserNickName();
-    $onlineUsers.addClass('shown');
-    $messages.mCustomScrollbar();
+    showModalUserLogin();
 });
 
-function showModalUserNickName() {
+function showModalUserLogin() {
     alertify.prompt("Enter your name to start:", "Biser Sirakov",
-        function (evt, value) {
-            $('#nickname').val(value);
-            $('.chat-title h1 span').html(value);
-            startChartHub();
+        function (e, name) {
+            $('#nickname').val(name);
+            $('.chat-title h1 span').html(name);
+            startChatHub();
         })
         .setHeader('Welcome to MyChat')
         .set({ transition: 'fade' })
         .set('labels', { ok: 'Enter' });
 }
 
-function startChartHub() {
-    chat = $.connection.myChatHub;
+function startChatHub() {
+    var chatHub = $.connection.myChatHub;
 
-    chat.client.differentName = function (name) {
+    registerClientMethods(chatHub);
+
+    $.connection.hub.start().done(function () {
+        registerEvents(chatHub)
+        chatHub.server.connect($('#nickname').val());
+    });
+}
+
+function registerClientMethods(chatHub) {
+    chatHub.client.differentName = function (name) {
         alertify.error('Name in use');
-        showModalUserNickName();
-        return false;
-
-        $('#nickname').val($('#nick').val());
-        chat.server.notify($('#nickname').val(), $.connection.hub.id);
+        showModalUserLogin();
     };
 
-    chat.client.online = function (name) {
-        if (name != $('#nickname').val()) {
-            $onlineUsers.append('<div class="online-user"><h1>' + name + '</h1><figure class="avatar"><img src="/Images/avatar.jpg" /></figure></div>');
-            // add new messages-content
+    chatHub.client.onConnected = function (name, allUsers, messages) {
+        allUsers.forEach(function (user) {
+            if (user.UserName != name) {
+                $onlineUsers.append('<div class="online-user"><h1>' + user.UserName + '</h1><figure class="avatar"><img src="/Images/avatar.jpg" /></figure></div>');
+                var $messagesContent = $('<div class="messages-content" data="' + user.UserName.toUpperCase() + '"></div>');
+                $('.messages').append($messagesContent);
+                $messagesContent.mCustomScrollbar();
+            }
+        });
 
-        }
-    };
+        //// add existing messages (for general chat)
+        //for (i = 0; i < messages.length; i++) {
 
-    chat.client.enters = function (name) {
+        //    AddMessage(messages[i].UserName, messages[i].Message);
+        //}
+    }
+
+    chatHub.client.onNewUserConnected = function (name) {
+        name = name.toUpperCase();
         alertify.success(name + ' joined the chat');
         $onlineUsers.append('<div class="online-user"><h1>' + name + '</h1><figure class="avatar"><img src="/Images/avatar.jpg" /></figure></div>');
-            // add new messages-content
+        var $messagesContent = $('<div class="messages-content" data="' + name.toUpperCase() + '"></div>');
+        $('.messages').append($messagesContent);
+        $messagesContent.mCustomScrollbar();
+    }
 
-    };
+    chatHub.client.onUserDisconnected = function (userName) {
+        alertify.error(userName + ' left the chat');
+        $('.online-user').remove(":contains('" + userName + "')");
+    }
 
-    chat.client.broadcastMessage = function (name, message) {
-        message = message.replace(":)", "<img src=\"/images/smile.gif\" class=\"smileys\" />");
-        message = message.replace("lol", "<img src=\"/images/laugh.gif\" class=\"smileys\" />");
-        message = message.replace(":o", "<img src=\"/images/cool.gif\" class=\"smileys\" />");
+    chatHub.client.messageReceived = function (userName, message) {
+        AddMessage(userName, message);
+    }
 
+    chatHub.client.getMessage = function (fromUserName, message) {
+        message = getEmoticons(message);
         if ($.trim(message) == '') {
             return false;
         }
 
-        if (name == $('#nickname').val()) {
-            $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new');
-        }
-        else {
-            $('<div class="message new"><figure class="avatar"><img src="/Images/avatar.jpg" /></figure>' + message + '</div>').appendTo($('.mCSB_container')).addClass('new');
-        }
-
+        $('<div class="message new"><figure class="avatar"><img src="/Images/avatar.jpg" /></figure>' + message + '</div>').appendTo($('.messages-content[data="' + fromUserName + '"] .mCSB_container')).addClass('new');
         updateScrollbar();
-    };
-
-    chat.client.disconnected = function (name) {
-        alertify.error(name + ' left the chat');
-        $('.online-user').remove(":contains('" + name + "')");
     }
 
-    $.connection.hub.start().done(function () {
-        chat.server.notify($('#nickname').val(), $.connection.hub.id);
-        
-        $(window).on('keydown', function (e) {
-            if (e.which == 13) {
-                insertMessage();
-                return false;
-            }
-        });
-    });
+    chatHub.client.getMyMessage = function (toUserName, message) {
+        message = getEmoticons(message);
+        if ($.trim(message) == '') {
+            return false;
+        }
 
-    $('.message-input').focus();
+        $('<div class="message message-personal">' + message + '</div>').appendTo($('.messages-content[data="' + toUserName + '"] .mCSB_container')).addClass('new');
+        updateScrollbar();
+    }
 }
 
-$("#attachment").change(function (e) {
-    e.preventDefault();
-    var fd = new FormData();
-    var input = document.querySelector("input#attachment");
+function registerEvents(chatHub) {
+    $("#attachment").change(function (e) {
+        e.preventDefault();
+        var fd = new FormData();
+        var input = document.querySelector("input#attachment");
 
-    if (input.files[0]) {
-        fd.append('file', input.files[0]);
-        $.ajax({
-            url: '/Home/UploadFile',
-            data: fd,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function (data) {
-                chat.server.send($('#nickname').val(), '<a class="uploaded-file" download target="_blank" href="/Uploads/' + data.fileName + '"><i class="fa fa-file" aria-hidden="true"></i> ' + data.fileName + '</a>');
-            }
-        });
-    }
-});
+        if (input.files[0]) {
+            fd.append('file', input.files[0]);
+            $.ajax({
+                url: '/Home/UploadFile',
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    chatHub.server.sendPrivateMessage($("#to").val(), '<a class="uploaded-file" download target="_blank" href="/Uploads/' + data.fileName + '"><i class="fa fa-file" aria-hidden="true"></i> ' + data.fileName + '</a>');
+                }
+            });
+        }
+    });
 
-$onlineUsers.on('click', '.online-user', function () {
-    $onlineUsers.removeClass('shown');
-    $messages.addClass('shown');
-    $messageBox.addClass('shown');
-    $closeBtn.addClass('shown');
+    $onlineUsers.on('click', '.online-user', function () {
+        var user = $(this).children('h1').text().toUpperCase();
 
-    var user = $(this).children('h1').text();
+        $onlineUsers.removeClass('shown');
+        $('.messages-content[data="' + user + '"]').addClass('shown');
+        $messageBox.addClass('shown');
+        $closeBtn.addClass('shown');
 
-    $('.chat-title figure img').attr('src', '/Images/avatar.jpg');
-    $('.chat-title h1 span').html(user);
-    $('#to').val(user);
-});
+        $('.chat-title figure img').attr('src', '/Images/avatar.jpg');
+        $('.chat-title h1 span').html(user);
+        $('#to').val(user);
 
-$closeBtn.on('click', function () {
-    $closeBtn.removeClass('shown');
-    $messages.removeClass('shown');
-    $messageBox.removeClass('shown');
-    $onlineUsers.addClass('shown');
+        updateScrollbar();
+    });
 
-    $('.chat-title figure img').attr('src', '/Images/profile-80.jpg');
-    $('.chat-title h1 span').html($('#nickname').val());
-});
+    $closeBtn.on('click', function () {
+        $closeBtn.removeClass('shown');
+        $('.messages-content[data="' + $("#to").val().toUpperCase() + '"]').removeClass('shown');
+        $messageBox.removeClass('shown');
+        $onlineUsers.addClass('shown');
 
-function insertMessage() {
-    //chat.server.send($('#nickname').val(), $('.message-input').val());
-    chat.server.sendToSpecific($('#nickname').val(), $('.message-input').val(), $("#to").val());
-    updateScrollbar();
-    $('.message-input').val(null);
+        $('.chat-title figure img').attr('src', '/Images/profile-80.jpg');
+        $('.chat-title h1 span').html($('#nickname').val());
+    });
+
+    $('.message-input').on('keydown', function (e) {
+        if (e.which == 13) {
+            chatHub.server.sendPrivateMessage($("#to").val(), $('.message-input').val());
+            updateScrollbar();
+            $('.message-input').val('');
+        }
+    });
 }
 
 function updateScrollbar() {
-    $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
+    $('.messages-content').mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
         scrollInertia: 10,
         timeout: 0
     });
+}
+
+function getEmoticons(message) {
+    message = message.replace(":)", "<img src=\"/images/smile.gif\" class=\"smileys\" />");
+    message = message.replace("lol", "<img src=\"/images/laugh.gif\" class=\"smileys\" />");
+    message = message.replace(":o", "<img src=\"/images/cool.gif\" class=\"smileys\" />");
+
+    return message;
 }

@@ -68,7 +68,6 @@
                 showModalUserNickName();
                 return false;
 
-                $('#nickname').val($('#nick').val());
                 chat.server.notify($('#nickname').val(), $.connection.hub.id);
             };
 
