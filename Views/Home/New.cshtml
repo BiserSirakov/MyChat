@@ -1,0 +1,40 @@
+﻿<input type="hidden" id="nickname" />
+<input type="hidden" id="to" />
+
+<div class="chat">
+    <div class="chat-title">
+        <h1>
+            <span></span>
+            <i class="close-btn fa fa-times" aria-hidden="true"></i>
+        </h1>
+        <figure class="avatar">
+            <img src="/Images/profile-80.jpg" />
+        </figure>
+    </div>
+    <div class="messages">
+        <div class="online-users">
+                <h1 class="online-users-title">Online users</h1>
+                @*<figure class="avatar">
+                    <img src="~/Images/avatar.jpg" />
+                </figure>*@
+
+            
+        </div>
+        <div class="messages-content"></div>
+    </div>
+    <div class="message-box">
+        <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+        <label for="attachment" class="attachment-label">
+            <i class="fa fa-cloud-upload"></i>
+        </label>
+        <input id="attachment" type="file" name="file" style="display: none" />
+    </div>
+</div>
+<div class="bg"></div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery.signalR-1.0.1.min.js")
+    @Scripts.Render("/signalr/hubs")
+    <script src="~/Scripts/mCustomScrollbar.min.js"></script>
+    <script src="~/Scripts/myChat.js"></script>
+}

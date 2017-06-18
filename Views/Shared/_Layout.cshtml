@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MyChat</title>
+    @*@Styles.Render("~/Content/css")
+
+        @Styles.Render("~/Content/myChat.css")
+
+        @Scripts.Render("~/bundles/modernizr")
+
+        <link href="~/Content/chat.css" rel="stylesheet" />
+        <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+    @Styles.Render("~/Content/alertify.min.css")
+    @Styles.Render("~/Content/alertify.default.min.css")
+    @Styles.Render("~/Content/font-awesome-4.7.0/css/font-awesome.min.css")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <link href="~/Content/new/new.min.css" rel="stylesheet" />
+</head>
+<body>
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/alertify.min.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

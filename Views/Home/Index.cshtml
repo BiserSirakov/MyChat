@@ -1,0 +1,152 @@
+﻿<input type="hidden" id="nickname" />
+
+<div class='container'>
+    <div class='chatbox'>
+
+        <div class='chatbox__user-list'>
+            <h1><i class="fa fa-users" aria-hidden="true"></i></h1>
+            <div class="chatbox__user"></div>
+        </div>
+
+        <div class="chatbox__messages">
+        </div>
+
+        <form class="chatbox__input" onsubmit="event.preventDefault()">
+            <input id="message" type="text" placeholder="Enter your message">
+
+            <label for="attachment" class="attachment-label">
+                <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-cloud-upload fa-stack-1x fa-inverse"></i>
+                </span>
+            </label>
+            <input id="attachment" type="file" name="file" style="display: none" />
+
+            <button type="submit" id="btnsend">
+                <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-paper-plane fa-stack-1x fa-inverse"></i>
+                </span>
+            </button>
+
+            <select id="users" style="display: none">
+                <option selected value="All">All</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery-ui-1.9.2.min.js")
+    @Scripts.Render("~/Scripts/jquery.signalR-1.0.1.min.js")
+    @Scripts.Render("/signalr/hubs")
+
+    <script type="text/javascript">
+        var chat;
+
+        $(function () {
+            showModalUserNickName();
+        });
+
+        function showModalUserNickName() {
+            alertify.prompt("Enter your name to start:", "Biser Sirakov",
+                function (evt, value) {
+                    $('#nickname').val(value);
+                    startChartHub();
+                }
+            )
+            .setHeader('Welcome to MyChat')
+            .set({ transition: 'fade' })
+            .set('labels', { ok: 'Enter' });
+        }
+
+        function startChartHub() {
+            chat = $.connection.myChatHub;
+            
+            chat.client.differentName = function (name) {
+                alertify.error('Name in use');
+                showModalUserNickName();
+                return false;
+
+                $('#nickname').val($('#nick').val());
+                chat.server.notify($('#nickname').val(), $.connection.hub.id);
+            };
+
+            chat.client.online = function (name) {
+                if (name == $('#nickname').val())
+                    $('.chatbox__user-list .chatbox__user').html('<p>' + name + '</p>');
+                else {
+                    $('.chatbox__user-list').append('<div class="chatbox__user--active"><p>' + name + '</p></div>');
+                    $("#users").append('<option value="' + name + '">' + name + '</option>');
+                }
+            };
+
+            chat.client.enters = function (name) {
+                alertify.success(name + ' joined the chat');
+                $("#users").append('<option value="' + name + '">' + name + '</option>');
+                $('.chatbox__user-list').append('<div class="chatbox__user--active"><p>' + name + '</p></div>');
+            };
+
+            chat.client.broadcastMessage = function (name, message) {
+                message = message.replace(":)", "<img src=\"/images/smile.gif\" class=\"smileys\" />");
+                message = message.replace("lol", "<img src=\"/images/laugh.gif\" class=\"smileys\" />");
+                message = message.replace(":o", "<img src=\"/images/cool.gif\" class=\"smileys\" />");
+
+                if ($.trim(message) == '') {
+                    return false;
+                }
+
+                if (name == $('#nickname').val()) {
+                    $('.chatbox__messages').append('<div class="chatbox__messages__user-message"><div class="chatbox__messages__user-message--ind-message" style="float: right"><p class="name">' + name + '</p><br /><p class="message">' + message + '</p></div></div>');
+                }
+                else {
+                    $('.chatbox__messages').append('<div class="chatbox__messages__user-message"><div class="chatbox__messages__user-message--ind-message" style="float: left"><p class="name">' + name + '</p><br /><p class="message">' + message + '</p></div></div>');
+                }
+            };
+
+            chat.client.disconnected = function (name) {
+                alertify.error(name + ' left the chat');
+                $('.chatbox__user-list .chatbox__user--active').remove(":contains('" + name + "')");
+                $("#users option").remove(":contains('" + name + "')");
+            }
+
+            $.connection.hub.start().done(function () {
+                chat.server.notify($('#nickname').val(), $.connection.hub.id);
+
+                $('#btnsend').click(function () {
+                    if ($("#users").val() == "All") {
+                        chat.server.send($('#nickname').val(), $('#message').val());
+                    }
+                    else {
+                        chat.server.sendToSpecific($('#nickname').val(), $('#message').val(), $("#users").val());
+                    }
+                    $('#message').val('').focus();
+                });
+
+            });
+
+            $('#message').focus();
+        }
+
+        $("#attachment").change(function (e) {
+            e.preventDefault();
+            var fd = new FormData();
+            var input = document.querySelector("input#attachment");
+            var i2 = $('#attachment');
+
+            if (input.files[0]) {
+                fd.append('file', input.files[0]);
+                $.ajax({
+                    url: '/Home/UploadFile',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function (data) {
+                        chat.server.send($('#nickname').val(), '<a class="uploaded-file" download target="_blank" href="/Uploads/' + data.fileName + '"><i class="fa fa-file" aria-hidden="true"></i> ' + data.fileName + '</a>');
+                    }
+                });
+            }
+        });
+    </script>
+}
