@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "Scripts/myChat.min.js",
+    "inputFiles": [
+      "Scripts/myChat.js"
+    ]
+  }
+]

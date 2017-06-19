@@ -4,18 +4,27 @@ var $closeBtn = $('.close-btn');
 
 $(function () {
     showModalUserLogin();
+    $('#group-chat').mCustomScrollbar();
 });
 
 function showModalUserLogin() {
-    alertify.prompt("Enter your name to start:", "Biser Sirakov",
+    var prompt = alertify.prompt("Enter your name to start:", "Biser Sirakov",
         function (e, name) {
             $('#nickname').val(name.toUpperCase());
             $('.chat-title h1 span').html(name);
             startChatHub();
         })
         .setHeader('Welcome to MyChat')
-        .set({ transition: 'fade' })
-        .set('labels', { ok: 'Enter' });
+        .setting({
+            'closableByDimmer': false,
+            'closable': false,
+            'movable': false,
+            'transition': 'fade',
+            'labels': { ok: 'Enter' }
+        });
+
+    var $cancelBtn = $(prompt.elements.footer.querySelector("button.ajs-cancel"));
+    $cancelBtn.remove();
 }
 
 function startChatHub() {
@@ -45,11 +54,17 @@ function registerClientMethods(chatHub) {
             }
         });
 
-        //// add existing messages (for general chat)
-        //for (i = 0; i < messages.length; i++) {
+        // add cached messages (for group chat)
+        messages.forEach(function (message) {
+            if (message.UserName == $('#nickname').val()) {
+                $('<div class="message message-personal">' + message.Message + '</div>').appendTo($('.messages-content[data="GROUP CHAT"] .mCSB_container')).addClass('new');
+            }
+            else {
+                $('<div class="message new" style="margin-top: 20px;"><figure class="avatar"><img src="/Images/avatar.jpg" /></figure>' + message.Message + '<div class="message-username">' + message.UserName + '</div></div>').appendTo($('.messages-content[data="GROUP CHAT"] .mCSB_container')).addClass('new');
+            }
+        });
 
-        //    AddMessage(messages[i].UserName, messages[i].Message);
-        //}
+        $('.messages-content[data="GROUP CHAT"]').mCustomScrollbar();
     }
 
     chatHub.client.onNewUserConnected = function (name) {
@@ -67,8 +82,21 @@ function registerClientMethods(chatHub) {
         $('.messages-content[data="' + userName.toUpperCase() + '"]').remove();
     }
 
+    // for group chat
     chatHub.client.messageReceived = function (userName, message) {
-        AddMessage(userName, message);
+        message = getEmoticons(message);
+        if ($.trim(message) == '') {
+            return false;
+        }
+
+        if (userName == $('#nickname').val()) {
+            $('<div class="message message-personal">' + message + '</div>').appendTo($('.messages-content[data="GROUP CHAT"] .mCSB_container')).addClass('new');
+        }
+        else {
+            $('<div class="message new" style="margin-top: 20px;"><figure class="avatar"><img src="/Images/avatar.jpg" /></figure>' + message + '<div class="message-username">' + userName + '</div></div>').appendTo($('.messages-content[data="GROUP CHAT"] .mCSB_container')).addClass('new');
+        }
+
+        updateScrollbar();
     }
 
     chatHub.client.getMessage = function (fromUserName, message) {
@@ -107,7 +135,15 @@ function registerEvents(chatHub) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                    chatHub.server.sendPrivateMessage($("#to").val(), '<a class="uploaded-file" download target="_blank" href="/Uploads/' + data.fileName + '"><i class="fa fa-file" aria-hidden="true"></i> ' + data.fileName + '</a>');
+                    var msg = '<a class="uploaded-file" download target="_blank" href="/Uploads/' + data.fileName + '"><i class="fa fa-file" aria-hidden="true"></i> ' + data.fileName + '</a>';
+                    if ($("#to").val() == 'GROUP CHAT') {
+                        chatHub.server.sendMessageToAll($("#nickname").val(), msg);
+                    }
+                    else {
+                        chatHub.server.sendPrivateMessage($("#to").val(), msg);
+                    }
+
+                    updateScrollbar();
                 }
             });
         }
@@ -120,6 +156,10 @@ function registerEvents(chatHub) {
         $('.messages-content[data="' + user + '"]').addClass('shown');
         $messageBox.addClass('shown');
         $closeBtn.addClass('shown');
+
+        if (user == 'GROUP CHAT') {
+            $('.chat-title figure').hide();
+        }
 
         $('.chat-title figure img').attr('src', '/Images/avatar.jpg');
         $('.chat-title h1 span').html(user);
@@ -134,13 +174,23 @@ function registerEvents(chatHub) {
         $messageBox.removeClass('shown');
         $onlineUsers.addClass('shown');
 
+        if ($('.chat-title figure').css('display') == 'none') {
+            $('.chat-title figure').show();
+        }
+
         $('.chat-title figure img').attr('src', '/Images/profile-80.jpg');
         $('.chat-title h1 span').html($('#nickname').val());
     });
 
     $('.message-input').on('keydown', function (e) {
         if (e.which == 13) {
-            chatHub.server.sendPrivateMessage($("#to").val(), $('.message-input').val());
+            if ($("#to").val() == 'GROUP CHAT') {
+                chatHub.server.sendMessageToAll($("#nickname").val(), $('.message-input').val());
+            }
+            else {
+                chatHub.server.sendPrivateMessage($("#to").val(), $('.message-input').val());
+            }
+
             updateScrollbar();
             $('.message-input').val('');
         }
@@ -155,9 +205,9 @@ function updateScrollbar() {
 }
 
 function getEmoticons(message) {
-    message = message.replace(":)", "<img src=\"/images/smile.gif\" class=\"smileys\" />");
-    message = message.replace("lol", "<img src=\"/images/laugh.gif\" class=\"smileys\" />");
-    message = message.replace(":o", "<img src=\"/images/cool.gif\" class=\"smileys\" />");
+    message = message.replace(":)", "<img src=\"/images/emoticons/smile.gif\" class=\"smileys\" />");
+    message = message.replace("lol", "<img src=\"/images/emoticons/laugh.gif\" class=\"smileys\" />");
+    message = message.replace(":o", "<img src=\"/images/emoticons/cool.gif\" class=\"smileys\" />");
 
     return message;
 }

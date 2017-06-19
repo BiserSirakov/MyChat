@@ -63,6 +63,11 @@ namespace MyChat.Hubs
         
         private void AddMessageinCache(string userName, string message)
         {
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
+
             CurrentMessages.Add(new MessageDetails { UserName = userName, Message = message });
 
             if (CurrentMessages.Count > 100)

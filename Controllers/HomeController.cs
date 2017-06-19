@@ -11,11 +11,6 @@ namespace MyChat.Controllers
             return View();
         }
 
-        public ActionResult New()
-        {
-            return View();
-        }
-
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
             if (file == null)

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -152,82 +153,84 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\alertify.default.min.css" />
-    <Content Include="Content\alertify.min.css" />
-    <Content Include="Content\chat.css" />
+    <Content Include="Content\alertifyjs\dist\css\alertify.css" />
+    <Content Include="Content\alertifyjs\dist\js\alertify.js" />
+    <Content Include="Content\alertifyjs\dist\js\ngAlertify.js" />
+    <Content Include="Content\alertifyjs\karma-ci.conf.js" />
+    <Content Include="Content\alertifyjs\karma.conf.js" />
+    <Content Include="Content\alertifyjs\src\css\alertify.css" />
+    <Content Include="Content\alertifyjs\src\js\alertify.js" />
+    <Content Include="Content\alertifyjs\src\js\ngAlertify.js" />
+    <Content Include="Content\alertifyjs\src\templates\alert.html" />
+    <Content Include="Content\alertifyjs\src\templates\confirm.html" />
+    <Content Include="Content\alertifyjs\src\templates\log.html" />
+    <Content Include="Content\alertifyjs\src\templates\prompt.html" />
+    <Content Include="Content\alertifyjs\website\404.html" />
+    <Content Include="Content\alertifyjs\website\angular.html" />
+    <Content Include="Content\alertifyjs\website\bootstrap.html" />
+    <Content Include="Content\alertifyjs\website\css\styles.css" />
+    <Content Include="Content\alertifyjs\website\css\styles.min.css" />
+    <Content Include="Content\alertifyjs\website\demo.html" />
+    <Content Include="Content\alertifyjs\website\fonts\Roboto-Light.svg" />
+    <Content Include="Content\alertifyjs\website\images\transparent.jpg" />
+    <Content Include="Content\alertifyjs\website\index.html" />
+    <Content Include="Content\alertifyjs\website\js\all.js" />
+    <Content Include="Content\alertifyjs\website\js\demo.js" />
+    <Content Include="Content\alertify\alertify.default.min.css" />
+    <Content Include="Content\alertify\alertify.min.css" />
     <Content Include="Content\font-awesome-4.7.0\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.7.0\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.7.0\HELP-US-OUT.txt" />
-    <Content Include="Content\myChat.css" />
-    <Content Include="Content\new\new.css">
-      <DependentUpon>new.scss</DependentUpon>
+    <Content Include="Content\jquery.mCustomScrollbar.min.css" />
+    <Content Include="Content\main.css">
+      <DependentUpon>main.scss</DependentUpon>
     </Content>
-    <Content Include="Content\new\new.min.css">
-      <DependentUpon>new.css</DependentUpon>
+    <Content Include="Content\main.min.css">
+      <DependentUpon>main.css</DependentUpon>
     </Content>
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\normalize.css" />
+    <Content Include="Content\normalize.min.css">
+      <DependentUpon>normalize.css</DependentUpon>
+    </Content>
+    <Content Include="Content\noty\.gitignore" />
+    <Content Include="Content\noty\demo\animate.css" />
+    <Content Include="Content\noty\demo\bg-dot.png" />
+    <Content Include="Content\noty\demo\bouncejs\bounce.js" />
+    <Content Include="Content\noty\demo\demo.css" />
+    <Content Include="Content\noty\demo\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-bold.svg" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-book.svg" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-light.svg" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-medium.svg" />
+    <Content Include="Content\noty\demo\fonts\stylesheet.css" />
+    <Content Include="Content\noty\demo\index.html" />
+    <Content Include="Content\noty\demo\logo.png" />
+    <Content Include="Content\noty\demo\noty-logo.png" />
+    <Content Include="Content\noty\demo\push.html" />
+    <Content Include="Content\noty\demo\sendpush.js" />
+    <Content Include="Content\noty\demo\sound-example.wav" />
+    <Content Include="Content\noty\demo\store.everything.min.js" />
+    <Content Include="Content\noty\Gruntfile.js" />
+    <Content Include="Content\noty\lib\noty.css" />
+    <Content Include="Content\noty\lib\noty.js" />
+    <Content Include="Content\noty\lib\noty.min.js" />
+    <Content Include="Content\noty\LICENSE.txt" />
+    <Content Include="Content\noty\postcss.config.js" />
+    <Content Include="Content\noty\src\api.js" />
+    <Content Include="Content\noty\src\button.js" />
+    <Content Include="Content\noty\src\index.js" />
+    <Content Include="Content\noty\src\push.js" />
+    <Content Include="Content\noty\src\utils.js" />
+    <Content Include="Content\noty\test\index.html" />
+    <Content Include="Content\noty\test\unit\init.test.js" />
+    <Content Include="Content\noty\test\unit\phantom.js" />
+    <Content Include="Content\noty\test\vendor\jquery-slim.min.js" />
+    <Content Include="Content\noty\test\vendor\qunit-theme-ninja.css" />
+    <Content Include="Content\noty\test\vendor\qunit.js" />
+    <Content Include="Content\noty\webpack.config.js" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Content\font-awesome-4.7.0\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome-4.7.0\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome-4.7.0\fonts\fontawesome-webfont.woff" />
@@ -261,39 +264,93 @@
     <Content Include="Content\font-awesome-4.7.0\scss\_screen-reader.scss" />
     <Content Include="Content\font-awesome-4.7.0\scss\_stacked.scss" />
     <Content Include="Content\font-awesome-4.7.0\scss\_variables.scss" />
-    <Content Include="Content\new\new.scss" />
+    <Content Include="Content\main.scss" />
+    <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="Content\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <Content Include="Content\alertifyjs\.bower.json" />
+    <Content Include="Content\alertifyjs\.codeclimate.yml" />
+    <Content Include="Content\alertifyjs\.coveralls.yml" />
+    <Content Include="Content\alertifyjs\.eslintrc" />
+    <Content Include="Content\alertifyjs\bower.json" />
+    <Content Include="Content\alertifyjs\CHANGELOG.md" />
+    <Content Include="Content\alertifyjs\CONTRIBUTING.md" />
+    <Content Include="Content\alertifyjs\ISSUE_TEMPLATE" />
+    <Content Include="Content\alertifyjs\LICENSE.md" />
+    <Content Include="Content\alertifyjs\README.md" />
+    <Content Include="Content\alertifyjs\src\sass\alertify.scss" />
+    <Content Include="Content\alertifyjs\update.json" />
+    <Content Include="Content\alertifyjs\website\fonts\MaterialIcons-Regular.eot" />
+    <Content Include="Content\alertifyjs\website\fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="Content\alertifyjs\website\fonts\MaterialIcons-Regular.woff" />
+    <Content Include="Content\alertifyjs\website\fonts\MaterialIcons-Regular.woff2" />
+    <Content Include="Content\alertifyjs\website\fonts\Roboto-Light.eot" />
+    <Content Include="Content\alertifyjs\website\fonts\Roboto-Light.ttf" />
+    <Content Include="Content\alertifyjs\website\fonts\Roboto-Light.woff" />
+    <Content Include="Content\alertifyjs\website\fonts\Roboto-Light.woff2" />
+    <Content Include="Content\noty\.babelrc" />
+    <Content Include="Content\noty\.bower.json" />
+    <Content Include="Content\noty\.codeclimate.yml" />
+    <Content Include="Content\noty\.editorconfig" />
+    <Content Include="Content\noty\.github\ISSUE_TEMPLATE.md" />
+    <Content Include="Content\noty\.travis.yml" />
+    <Content Include="Content\noty\bower.json" />
+    <Content Include="Content\noty\composer.json" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\noty\demo\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-bold.eot" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-bold.ttf" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-bold.woff" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-book.eot" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-book.ttf" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-book.woff" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-light.eot" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-light.ttf" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-light.woff" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-medium.eot" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-medium.ttf" />
+    <Content Include="Content\noty\demo\fonts\gothamrnd-medium.woff" />
+    <Content Include="Content\noty\lib\noty.css.map" />
+    <Content Include="Content\noty\lib\noty.js.map" />
+    <Content Include="Content\noty\lib\noty.min.js.map" />
+    <Content Include="Content\noty\manifest.json.template" />
+    <Content Include="Content\noty\package.json" />
+    <Content Include="Content\noty\README.markdown" />
+    <Content Include="Content\noty\service-worker.js.template" />
+    <Content Include="Content\noty\src\noty.scss" />
+    <Content Include="Content\noty\src\themes\bootstrap-v3.scss" />
+    <Content Include="Content\noty\src\themes\bootstrap-v4.scss" />
+    <Content Include="Content\noty\src\themes\metroui.scss" />
+    <Content Include="Content\noty\src\themes\mint.scss" />
+    <Content Include="Content\noty\src\themes\nest.scss" />
+    <Content Include="Content\noty\src\themes\relax.scss" />
+    <Content Include="Content\noty\src\themes\semanticui.scss" />
+    <Content Include="Content\noty\src\themes\sunset.scss" />
+    <None Include="Properties\PublishProfiles\MyChatRSA - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\MyChatRSA - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\MyChatRSA - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\MyChatRSA - Web Deploy.pubxml" />
-    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\avatar.jpg" />
-    <Content Include="Images\cool.gif" />
-    <Content Include="Images\laugh.gif" />
+    <Content Include="Images\Emoticons\cool.gif" />
+    <Content Include="Images\Emoticons\laugh.gif" />
     <Content Include="Images\profile-80.jpg" />
-    <Content Include="Images\smile.gif" />
+    <Content Include="Images\Emoticons\smile.gif" />
     <Content Include="Scripts\alertify.min.js" />
-    <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery-ui-1.9.2.js" />
-    <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
-    <Content Include="Scripts\jquery.signalR-1.0.1.js" />
     <Content Include="Scripts\jquery.signalR-1.0.1.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\knockout-2.2.0.debug.js" />
-    <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\mCustomScrollbar.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\myChat.js" />
-    <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\myChat.min.js">
+      <DependentUpon>myChat.js</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -306,17 +363,25 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\New.cshtml" />
+    <Content Include="Scripts\myChat.min.js.map">
+      <DependentUpon>myChat.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <TypeScriptCompile Include="Content\alertifyjs\alertify-js.d.ts" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
