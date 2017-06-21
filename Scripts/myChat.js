@@ -77,6 +77,10 @@ function registerClientMethods(chatHub) {
     }
 
     chatHub.client.onUserDisconnected = function (userName) {
+        if ($('.messages-content[data="' + $("#to").val().toUpperCase() + '"]').hasClass('shown')) {
+            closeChatWindow();
+        }
+
         alertify.error(userName + ' left the chat');
         $('.online-user').remove(":contains('" + userName.toUpperCase() + "')");
         $('.messages-content[data="' + userName.toUpperCase() + '"]').remove();
@@ -169,17 +173,7 @@ function registerEvents(chatHub) {
     });
 
     $closeBtn.on('click', function () {
-        $closeBtn.removeClass('shown');
-        $('.messages-content[data="' + $("#to").val().toUpperCase() + '"]').removeClass('shown');
-        $messageBox.removeClass('shown');
-        $onlineUsers.addClass('shown');
-
-        if ($('.chat-title figure').css('display') == 'none') {
-            $('.chat-title figure').show();
-        }
-
-        $('.chat-title figure img').attr('src', '/Images/profile-80.jpg');
-        $('.chat-title h1 span').html($('#nickname').val());
+        closeChatWindow();
     });
 
     $('.message-input').on('keydown', function (e) {
@@ -195,6 +189,20 @@ function registerEvents(chatHub) {
             $('.message-input').val('');
         }
     });
+}
+
+function closeChatWindow() {
+    $closeBtn.removeClass('shown');
+    $('.messages-content[data="' + $("#to").val().toUpperCase() + '"]').removeClass('shown');
+    $messageBox.removeClass('shown');
+    $onlineUsers.addClass('shown');
+
+    if ($('.chat-title figure').css('display') == 'none') {
+        $('.chat-title figure').show();
+    }
+
+    $('.chat-title figure img').attr('src', '/Images/profile-80.jpg');
+    $('.chat-title h1 span').html($('#nickname').val());
 }
 
 function updateScrollbar() {
